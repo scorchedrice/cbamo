@@ -4,6 +4,8 @@
 
 `2025.01.17 ~`
 
+[`Cbamo Wiki`](https://github.com/scorchedrice/cbamo/wiki)
+
 ### Ground Rule
 
 - 주 2회 `화요일/ 금요일` 진행
