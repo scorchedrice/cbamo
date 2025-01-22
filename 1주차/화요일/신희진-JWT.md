@@ -5,7 +5,7 @@
 - **JWT**는 JSON 형식의 데이터를 웹 표준(RFC 7519)에 따라 안전하게 전송하기 위한 토큰입니다.
 - **Self-Contained(자가 수용적)**: 필요한 모든 정보를 자체적으로 포함하여 서버가 별도로 상태를 저장할 필요가 없습니다.
 - 주로 **인증(Authentication)**과 **정보 교류(Information Exchange)**에 사용됩니다.
-
+![JWT1.png](JWT1.png)
 ---
 
 ## JWT의 등장!
@@ -234,7 +234,7 @@ Signature의 역할은 다음과 같습니다:
 | **확장성** | 낮음 | 높음 |
 | **보안성** | 높음 | 중간 (서명으로 위변조 방지) |
 | **토큰 길이** | 짧음 | 비교적 길다 |
-
+![JWT vs Cookie/Session.png](JWT-CookieSession.png)
 ---
 
 ## JWT의 장단점
@@ -253,5 +253,4 @@ Signature의 역할은 다음과 같습니다:
 2. **토큰 길이**: 클레임이 많아질수록 네트워크 부하가 발생할 수 있습니다.
 3. **탈취 위험**: 토큰이 유출되면 만료 전까지 사용할 수 있습니다.
 
-![서버 기반 인증 동작 방식](Server.png)
-![JWT-Cookie-Session](JWT-Cookie-Session.png)
+
