@@ -102,17 +102,17 @@ WebSocket은 클라이언트와 서버 간에 **양방향(full-duplex) 통신**�
 - 클라이언트가 `Upgrade: websocket` 헤더를 포함한 HTTP 요청을 보냄.
 - 서버가 `101 Switching Protocols` HTTP 응답을 보내면서 **WebSocket** 연결을 승인.
     
-    ![WebSocket Opening Handshake.png](WebSocket Opening Handshake.png)
+    ![WebSocket Opening Handshake.png](WebSocketOpeningHandshake.png)
     
 - 동작 과정
     - 클라이언트 요청에는 헤더에 아래와 같은 내용이 담김 **헤더는 우편물에 붙은 송장같은 의미*
         
-        ![WebSocket Opening Handshake Header.png](WebSocket Opening Handshake Header.png)
+        ![WebSocket Opening Handshake Header.png](WebSocketOpeningHandshakeHeader.png)
         
         - Upgrade, Connection: 현재의HTTP연결을 WebSocket 프로토콜로 업그레이드하자는 내용
         - Sec-WebSocket-Key: 클라이언트가 랜덤으로 생성한 값을 Base64로 인코딩한 문자열
             
-            ![WebSocket Opening Handshake Header.png](WebSocket Opening Handshake Header2.png)
+            ![WebSocket Opening Handshake Header.png](WebSocketOpeningHandshakeHeader2.png)
             
             - 서버는 이 요청을 받고, GUID라 불리는 정해진 문자열을 해당 키 뒤에 이어붙인 뒤 SHA-1 해시로 계산하여 다시 base64로 인코딩
         - 서버는 이 값을 헤더에 담아 클라이언트로 돌려보냄
@@ -127,7 +127,7 @@ WebSocket은 클라이언트와 서버 간에 **양방향(full-duplex) 통신**�
 
 - 클라이언트 또는 서버가 연결을 종료하면 `Close` 프레임을 전송하여 연결을 정리.
     
-    ![WebSocket Closing Handshake.png](WebSocket Closing Handshake.png)
+    ![WebSocket Closing Handshake.png](WebSocketClosingHandshake.png)
     
 
 **비정상적인 종료 감지**
@@ -141,7 +141,7 @@ WebSocket은 클라이언트와 서버 간에 **양방향(full-duplex) 통신**�
 
 ## 3. TCP 소켓, UDP 소켓
 
-![OSI 7 Layer.png](OSI 7 Layer.png)
+![OSI 7 Layer.png](OSI7Layer.png)
 
 - 속한 OSI 7계층이 다름
 - TCP, UDP 소켓은 전송 계층인 Layer 4에서, WebSocket은 응용계층인 Layer7에서 동작함
