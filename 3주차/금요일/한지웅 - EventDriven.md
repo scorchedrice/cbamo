@@ -173,8 +173,6 @@ SAGA 패턴에서 이벤트가 모두 성공한 경우는 위와 같다. 반면 
 
 각 애플리케이션 하위에 존재하는 DB는 local 트랜잭션만 담당한다. 각각의 애플리케이션의 트랜잭션 요청의 실패로 인한 rollback 처리는 애플리케이션 내부에서 구현한다는 것이다.
 
-
-
 ## 참고자료
 
 [EventDrivenArchitecture - 코드팩토리](https://youtu.be/qZ8F7tj4GHg?si=RGAkZrkHoJJTP8l0)
