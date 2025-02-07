@@ -77,17 +77,103 @@
      - 포인트 적립, 송금정보 처리등에 이러한 오류가 발생하면 치명적이기에 추가적인 구현이 필요하다는 것이 단점.
 3. 아키텍처 복잡도가 높아진다.
 
+## 사용 예시
+
+개인적으로 `nest`와 `kafk`로 `EDA`구조를 만든적 있다. 이와 같은 코드를 예시로 어떤 방법으로 기능을 구현하면 좋을지 작성하고자한다.
+
+```mermaid
+flowchart TD
+  subgraph Kafka[Kafka Broker]
+    topic[Topic]
+  end
+
+  subgraph Services
+    producer[Producer-trading localhost:3000]
+    consumer[Consumer-chart_monitoring localhost:3001]
+    frontend[React localhost:5173]
+    db[(Database)]
+  end
+
+%% Current data flow
+  producer --> topic
+  topic --> consumer
+  consumer --> frontend
+
+%% Future DB implementation
+  consumer -.-|DB 저장 - 구현예정|db
+
+%% Styling with universal colors
+  classDef kafkaStyle fill:#ff9966,stroke:#666,stroke-width:2px,color:#333
+  classDef serviceStyle fill:#90EE90,stroke:#666,color:#333
+  classDef topicStyle fill:#FFF,stroke:#ff9966,color:#333
+  classDef dbStyle fill:#87CEEB,stroke:#666,stroke-dasharray: 5 5,color:#333
+
+  class Kafka kafkaStyle
+  class producer,consumer,frontend serviceStyle
+  class topic topicStyle
+  class db dbStyle
+```
+
+나는 다음과 같은 구조를 만들어봤는데, 자세한 내용은 아래의 링크를 확인하고 이 글에선 간단하게 어떤식으로 구현을 해야하는지만 적으려한다.
+
+[nest, kafka로 구현한 EDA Code](https://github.com/scorchedrice/kafka-websocket)
+
+[구현 과정](https://scorchedrice.github.io/categories/kafka/)
+
+1. `kafka`를 띄운다 - `Docker` 활용
+2. `producer`, `consumer`의 입장에서 각각 `kafka`를 연결한다.
+   - `producer`는 특정 이벤트 발생 시 어떤 메시지를 어떤 토픽의 `kafka`로 던질 것인지 로직 구현
+   - `consumer`는 어떤 그룹에 속했는지, 어떤 토픽을 구독할지, 각 메세지 별로 어떤 처리를 할지 로직 구현
+
 ## 언제쓰냐?
 
 1. Background Task
     - 결재 완료 후 이메일 발송
     - 주문 완료 후 포인트 적립
 2. CQRS Pattern
-    - 읽기 / 쓰기 작업 분리
-    - 데이터 동기화
 3. Saga Pattern
    - MSA간 트랜잭션 관리
    - 보상 트랜잭션 처리
+
+### CQRS Pattern
+
+명령(Command)와 질의(Query)의 책임을 분리하는 패턴이다.
+- 시스템 상태를 변경하는 Command, 시스템 상태를 조회하는 Query를 분리한다.
+- 쓰기위한 데이터모델과 읽기위한 데이터모델을 분리한다.
+- 데이터를 쓰는 빈도보다 읽는 빈도가 높은 경우에 동일한 데이터 모델을 활용한다면 정규화된 테이블에 추가적인 조인 연산이 필요하기에 성능적 저하가 발생할 수 있는데, 이와같은 저하를 막기위해 활용한다.
+  - 성능개선이 있을 수 있지만 저장공간이 더 필요하다는점 등이 단점이다.
+
+구현 예시는 다음과 같다.
+
+<img src="./cqrs-1.png" alt="cqrs 단일 DBMS">
+<img src="./cqrs-2.png" alt="cqrs 다중 DBMS">
+
+여기서 `EDA`를 활용하면 다음과같이 구성할 수 있다.
+
+<img src="./cqrs-eventhandler.png" alt="cqrs 다중 DBMS - eda">
+
+### SAGA pattern
+
+우선 `SAGA`를 이해하기 위해선 트랜잭션을 이해해야하는데, 일단 DB상태를 변화시키기 위해 수행하는 작업의 단위로 이해하자. 
+상세 정보는 추후 트랜잭션을 주제로 다루기로하고 일단은 넘어가겠다.
+
+아무튼 기존 `Monolothic`환경에서는 DBMS가 기본적으로 제공하는 트랜잭션 기능을 활용하여 DB commit, rollback을 일관성있게 관리하였으나 분산 시스템의 경우엔 단일 DBMS에서 해결할 수 없기에 등장한 패턴이다.
+
+`SAGA`는 마이크로서비스간 이벤트를 주고받는 과정에서 특정 마이크로서비스에서의 작업이 실패한 경우 이전까지 작업이 완료된 마이크로서비스들에게 보상 이벤트를 소싱하여 원자성을 보장하는 패턴이다.
+
+이 무슨소리냐~ 하면 다음 사진을 확인해보자.
+
+<img src="./saga1.png" alt="saga - 트랜잭션 성공" width="800">
+
+SAGA 패턴에서 이벤트가 모두 성공한 경우는 위와 같다. 반면 실패한 경우는 아래와 같이 동작한다.
+
+<img src="./saga2.png" alt="saga - 트랜잭션 실패" width="800">
+
+즉, SAGA 패턴의 핵심은 관리주체가 DBMS가 아닌 애플리케이션에 있다는 것이다. 
+
+각 애플리케이션 하위에 존재하는 DB는 local 트랜잭션만 담당한다. 각각의 애플리케이션의 트랜잭션 요청의 실패로 인한 rollback 처리는 애플리케이션 내부에서 구현한다는 것이다.
+
+
 
 ## 참고자료
 
