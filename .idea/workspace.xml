@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0cae4ae-6263-4ddc-a960-92de3841e867" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/9주차/한지웅/AI러닝플랫폼혁신.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/9주차/한지웅/img.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/9주차/한지웅/img_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/9주차/한지웅/img_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/9주차/한지웅/img_3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/9주차/한지웅/img_4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/9주차/한지웅/img_5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/10주차/한지웅/0. CS를 다시 학습하는 이유.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/10주차/한지웅/1-2. 컴퓨터가 이해하는 정보.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +75,9 @@
       <workItem from="1741757178515" duration="6051000" />
       <workItem from="1741768680667" duration="495000" />
       <workItem from="1741777413521" duration="5456000" />
-      <workItem from="1742974643816" duration="2175000" />
+      <workItem from="1742974643816" duration="2201000" />
+      <workItem from="1746777339410" duration="2896000" />
+      <workItem from="1746784142364" duration="2703000" />
     </task>
     <servers />
   </component>
